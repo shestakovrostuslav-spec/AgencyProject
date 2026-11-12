@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-
-
 namespace RealEstateAgency.Models
 {
     public class Property
@@ -12,7 +10,6 @@ namespace RealEstateAgency.Models
         public double Area { get; set; }
         public string Address { get; set; } = "";
         public double Price { get; set; }
-        public string Status { get; set; } = "На продажу";
+        public string Status { get; set; } = "На продаж";
     }
 }
-

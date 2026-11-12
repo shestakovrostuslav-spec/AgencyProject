@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-
 namespace RealEstateAgency.Models
 {
     public class Deal
@@ -13,12 +12,10 @@ namespace RealEstateAgency.Models
 
         public double Price { get; set; }
 
-        public string Type { get; set; } = "Покупка";
+        public string Type { get; set; } = "Купівля";
 
         public double CommissionPercent { get; set; }
 
         public DateTime Date { get; set; } = DateTime.Now;
     }
 }
-
-

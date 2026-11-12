@@ -11,7 +11,10 @@ namespace RealEstateAgency
     {
         static void Main(string[] args)
         {
-            // Создаём сервисы
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.InputEncoding = Encoding.UTF8;
+
+            // Створюємо сервіси
             PropertyService propertyService =
                 new PropertyService();
 
@@ -21,17 +24,17 @@ namespace RealEstateAgency
             AgentService agentService =
                 new AgentService();
 
-            // Создаём сервис сделок
+            // Створюємо сервіс угод
             DealService dealService = new DealService();
 
-            // Создаём интерфейс
+            // Створюємо інтерфейс
             ConsoleMenu menu = new ConsoleMenu(
                 propertyService,
                 clientService,
                 agentService,
                 dealService);
 
-            // Запускаем программу
+            // Запускаємо програму
             menu.Run();
         }
     }

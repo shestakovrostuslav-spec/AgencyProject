@@ -25,10 +25,10 @@ namespace RealEstateAgency.BusinessLogic
         public void Add(Property property)
         {
             if (property.Area <= 0 || property.Price <= 0)
-                throw new Exception("Некорректная площадь или цена!");
+                throw new Exception("Некоректна площа або ціна!");
 
             if (string.IsNullOrWhiteSpace(property.Address))
-                throw new Exception("Введите адрес!");
+                throw new Exception("Введіть адресу!");
 
             properties.Add(property);
             storage.Save(properties);
@@ -37,10 +37,10 @@ namespace RealEstateAgency.BusinessLogic
         public void Update(int number, Property updated)
         {
             if (number < 1 || number > properties.Count)
-                throw new Exception("Неверный номер объекта!");
+                throw new Exception("Невірний номер об'єкта!");
 
             if (updated.Area <= 0 || updated.Price <= 0)
-                throw new Exception("Некорректная площадь или цена!");
+                throw new Exception("Некоректна площа або ціна!");
 
             Property property = properties[number - 1];
 
@@ -56,7 +56,7 @@ namespace RealEstateAgency.BusinessLogic
         public void Delete(int number)
         {
             if (number < 1 || number > properties.Count)
-                throw new Exception("Неверный номер объекта!");
+                throw new Exception("Невірний номер об'єкта!");
 
             properties.RemoveAt(number - 1);
             storage.Save(properties);

@@ -26,10 +26,10 @@ namespace RealEstateAgency.BusinessLogic
         public void Add(Client client)
         {
             if (string.IsNullOrWhiteSpace(client.Name))
-                throw new Exception("Введите имя клиента!");
+                throw new Exception("Введіть ім'я клієнта!");
 
             if (string.IsNullOrWhiteSpace(client.Phone))
-                throw new Exception("Введите телефон!");
+                throw new Exception("Введіть телефон!");
 
             clients.Add(client);
             storage.Save(clients);
@@ -38,10 +38,10 @@ namespace RealEstateAgency.BusinessLogic
         public void Update(int number, Client updated)
         {
             if (number < 1 || number > clients.Count)
-                throw new Exception("Неверный номер клиента!");
+                throw new Exception("Невірний номер клієнта!");
 
             if (string.IsNullOrWhiteSpace(updated.Name))
-                throw new Exception("Введите имя!");
+                throw new Exception("Введіть ім'я!");
 
             Client client = clients[number - 1];
 
@@ -56,12 +56,10 @@ namespace RealEstateAgency.BusinessLogic
         public void Delete(int number)
         {
             if (number < 1 || number > clients.Count)
-                throw new Exception("Неверный номер клиента!");
+                throw new Exception("Невірний номер клієнта!");
 
             clients.RemoveAt(number - 1);
             storage.Save(clients);
         }
     }
 }
-
-

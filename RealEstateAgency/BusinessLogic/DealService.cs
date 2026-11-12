@@ -32,10 +32,10 @@ namespace RealEstateAgency.BusinessLogic
             double commission)
         {
             if (price <= 0)
-                throw new Exception("Некорректная стоимость!");
+                throw new Exception("Некоректна вартість!");
 
             if (commission < 0 || commission > 100)
-                throw new Exception("Некорректная комиссия!");
+                throw new Exception("Некоректна комісія!");
 
             Deal deal = new Deal
             {

@@ -25,14 +25,13 @@ namespace RealEstateAgency.BusinessLogic
         public void Add(Agent agent)
         {
             if (string.IsNullOrWhiteSpace(agent.Name))
-                throw new Exception("Введите имя риелтора!");
+                throw new Exception("Введіть ім'я рієлтора!");
 
             if (agent.Experience < 0)
-                throw new Exception("Некорректный опыт работы!");
+                throw new Exception("Некоректний досвід роботи!");
 
             agents.Add(agent);
             storage.Save(agents);
         }
     }
 }
-

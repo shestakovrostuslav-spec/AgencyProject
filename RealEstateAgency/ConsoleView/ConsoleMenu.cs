@@ -25,33 +25,33 @@ namespace RealEstateAgency.Presentation
             dealService = deals;
         }
 
-        // Главное меню
+        // Головне меню
         public void Run()
         {
             bool running = true;
 
             while (running)
             {
-                Console.WriteLine("\n===== РИЕЛТОРСКОЕ АГЕНТСТВО =====");
-                Console.WriteLine("1. Добавить недвижимость");
-                Console.WriteLine("2. Показать недвижимость");
-                Console.WriteLine("3. Изменить недвижимость");
-                Console.WriteLine("4. Удалить недвижимость");
+                Console.WriteLine("\n===== РІЄЛТОРСЬКЕ АГЕНТСТВО =====");
+                Console.WriteLine("1. Додати нерухомість");
+                Console.WriteLine("2. Показати нерухомість");
+                Console.WriteLine("3. Змінити нерухомість");
+                Console.WriteLine("4. Видалити нерухомість");
 
-                Console.WriteLine("\n5. Добавить клиента");
-                Console.WriteLine("6. Показать клиентов");
-                Console.WriteLine("7. Изменить клиента");
-                Console.WriteLine("8. Удалить клиента");
+                Console.WriteLine("\n5. Додати клієнта");
+                Console.WriteLine("6. Показати клієнтів");
+                Console.WriteLine("7. Змінити клієнта");
+                Console.WriteLine("8. Видалити клієнта");
 
-                Console.WriteLine("\n9. Добавить риелтора");
-                Console.WriteLine("10. Показать риелторов");
+                Console.WriteLine("\n9. Додати рієлтора");
+                Console.WriteLine("10. Показати рієлторів");
 
-                Console.WriteLine("\n11. Создать сделку");
-                Console.WriteLine("12. Показать сделки");
+                Console.WriteLine("\n11. Створити угоду");
+                Console.WriteLine("12. Показати угоди");
 
-                Console.WriteLine("\n0. Выход");
+                Console.WriteLine("\n0. Вихід");
 
-                Console.Write("\nВыберите действие: ");
+                Console.Write("\nОберіть дію: ");
 
                 string choice = Console.ReadLine() ?? "";
 
@@ -109,17 +109,17 @@ namespace RealEstateAgency.Presentation
 
                         case "0":
                             running = false;
-                            Console.WriteLine("Программа завершена.");
+                            Console.WriteLine("Програму завершено.");
                             break;
 
                         default:
-                            Console.WriteLine("Неверный пункт меню!");
+                            Console.WriteLine("Невірний пункт меню!");
                             break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Ошибка: " + ex.Message);
+                    Console.WriteLine("Помилка: " + ex.Message);
                 }
             }
         }
@@ -133,17 +133,18 @@ namespace RealEstateAgency.Presentation
                 if (int.TryParse(Console.ReadLine(), out int value))
                     return value;
 
-                Console.WriteLine("Введите целое число!");
+                Console.WriteLine("Введіть ціле число!");
             }
         }
-        // Ввод текста
+
+        // Введення тексту
         private string ReadText(string message)
         {
             Console.Write(message);
             return Console.ReadLine() ?? "";
         }
 
-        // Ввод числа
+        // Введення числа
         private double ReadDouble(string message)
         {
             while (true)
@@ -153,11 +154,11 @@ namespace RealEstateAgency.Presentation
                 if (double.TryParse(Console.ReadLine(), out double value))
                     return value;
 
-                Console.WriteLine("Введите корректное число!");
+                Console.WriteLine("Введіть коректне число!");
             }
         }
 
-        // Ввод ID
+        // Введення ID
         private Guid ReadId(string message)
         {
             while (true)
@@ -167,34 +168,34 @@ namespace RealEstateAgency.Presentation
                 if (Guid.TryParse(value, out Guid id))
                     return id;
 
-                Console.WriteLine("Некорректный ID!");
+                Console.WriteLine("Некоректний ID!");
             }
         }
 
-        // Добавление недвижимости
+        // Додавання нерухомості
         private void AddProperty()
         {
             Property property = new Property();
 
-            property.Type = ReadText("Тип недвижимости: ");
-            property.Area = ReadDouble("Площадь: ");
-            property.Address = ReadText("Адрес: ");
-            property.Price = ReadDouble("Цена: ");
+            property.Type = ReadText("Тип нерухомості: ");
+            property.Area = ReadDouble("Площа: ");
+            property.Address = ReadText("Адреса: ");
+            property.Price = ReadDouble("Ціна: ");
             property.Status = ReadText("Статус: ");
 
             propertyService.Add(property);
 
-            Console.WriteLine("Недвижимость добавлена!");
+            Console.WriteLine("Нерухомість додано!");
         }
 
-        // Просмотр недвижимости
+        // Перегляд нерухомості
         private void ShowProperties()
         {
             var properties = propertyService.GetAll();
 
             if (properties.Count == 0)
             {
-                Console.WriteLine("Список недвижимости пуст.");
+                Console.WriteLine("Список нерухомості порожній.");
                 return;
             }
 
@@ -204,68 +205,68 @@ namespace RealEstateAgency.Presentation
 
                 Console.WriteLine($"\nНомер: {i + 1}");
                 Console.WriteLine($"Тип: {p.Type}");
-                Console.WriteLine($"Площадь: {p.Area}");
-                Console.WriteLine($"Адрес: {p.Address}");
-                Console.WriteLine($"Цена: {p.Price}");
+                Console.WriteLine($"Площа: {p.Area}");
+                Console.WriteLine($"Адреса: {p.Address}");
+                Console.WriteLine($"Ціна: {p.Price}");
                 Console.WriteLine($"Статус: {p.Status}");
             }
         }
 
-        // Изменение недвижимости
+        // Зміна нерухомості
         private void UpdateProperty()
         {
             ShowProperties();
 
-            int number = ReadInt("\nНомер недвижимости: ");
+            int number = ReadInt("\nНомер нерухомості: ");
 
             Property updated = new Property();
 
-            updated.Type = ReadText("Новый тип: ");
-            updated.Area = ReadDouble("Новая площадь: ");
-            updated.Address = ReadText("Новый адрес: ");
-            updated.Price = ReadDouble("Новая цена: ");
-            updated.Status = ReadText("Новый статус: ");
+            updated.Type = ReadText("Новий тип: ");
+            updated.Area = ReadDouble("Нова площа: ");
+            updated.Address = ReadText("Нова адреса: ");
+            updated.Price = ReadDouble("Нова ціна: ");
+            updated.Status = ReadText("Новий статус: ");
 
             propertyService.Update(number, updated);
 
-            Console.WriteLine("Недвижимость изменена!");
+            Console.WriteLine("Нерухомість змінено!");
         }
 
-        // Удаление недвижимости
+        // Видалення нерухомості
         private void DeleteProperty()
         {
             ShowProperties();
 
-            int number = ReadInt("\nНомер недвижимости: ");
+            int number = ReadInt("\nНомер нерухомості: ");
 
             propertyService.Delete(number);
 
-            Console.WriteLine("Недвижимость удалена!");
+            Console.WriteLine("Нерухомість видалено!");
         }
 
-        // Добавление клиента
+        // Додавання клієнта
         private void AddClient()
         {
             Client client = new Client();
 
-            client.Name = ReadText("Имя клиента: ");
+            client.Name = ReadText("Ім'я клієнта: ");
             client.Phone = ReadText("Телефон: ");
             client.Email = ReadText("Email: ");
-            client.Type = ReadText("Тип (Покупатель/Владелец): ");
+            client.Type = ReadText("Тип (Покупець/Власник): ");
 
             clientService.Add(client);
 
-            Console.WriteLine("Клиент добавлен!");
+            Console.WriteLine("Клієнта додано!");
         }
 
-        // Просмотр клиентов
+        // Перегляд клієнтів
         private void ShowClients()
         {
             var clients = clientService.GetAll();
 
             if (clients.Count == 0)
             {
-                Console.WriteLine("Список клиентов пуст.");
+                Console.WriteLine("Список клієнтів порожній.");
                 return;
             }
 
@@ -274,65 +275,65 @@ namespace RealEstateAgency.Presentation
                 var c = clients[i];
 
                 Console.WriteLine($"\nНомер: {i + 1}");
-                Console.WriteLine($"Имя: {c.Name}");
+                Console.WriteLine($"Ім'я: {c.Name}");
                 Console.WriteLine($"Телефон: {c.Phone}");
                 Console.WriteLine($"Email: {c.Email}");
                 Console.WriteLine($"Тип: {c.Type}");
             }
         }
 
-        // Изменение клиента
+        // Зміна клієнта
         private void UpdateClient()
         {
             ShowClients();
 
-            int number = ReadInt("\nНомер клиента: ");
+            int number = ReadInt("\nНомер клієнта: ");
 
             Client updated = new Client();
 
-            updated.Name = ReadText("Новое имя: ");
-            updated.Phone = ReadText("Новый телефон: ");
-            updated.Email = ReadText("Новый Email: ");
-            updated.Type = ReadText("Новый тип: ");
+            updated.Name = ReadText("Нове ім'я: ");
+            updated.Phone = ReadText("Новий телефон: ");
+            updated.Email = ReadText("Новий Email: ");
+            updated.Type = ReadText("Новий тип: ");
 
             clientService.Update(number, updated);
 
-            Console.WriteLine("Клиент изменён!");
+            Console.WriteLine("Клієнта змінено!");
         }
 
-        // Удаление клиента
+        // Видалення клієнта
         private void DeleteClient()
         {
             ShowClients();
 
-            int number = ReadInt("\nНомер клиента: ");
+            int number = ReadInt("\nНомер клієнта: ");
 
             clientService.Delete(number);
 
-            Console.WriteLine("Клиент удалён!");
+            Console.WriteLine("Клієнта видалено!");
         }
 
-        // Добавление риелтора
+        // Додавання рієлтора
         private void AddAgent()
         {
             Agent agent = new Agent();
 
-            agent.Name = ReadText("Имя риелтора: ");
-            agent.Experience = (int)ReadDouble("Опыт работы (лет): ");
+            agent.Name = ReadText("Ім'я рієлтора: ");
+            agent.Experience = (int)ReadDouble("Досвід роботи (років): ");
 
             agentService.Add(agent);
 
-            Console.WriteLine("Риелтор добавлен!");
+            Console.WriteLine("Рієлтора додано!");
         }
 
-        // Просмотр риелторов
+        // Перегляд рієлторів
         private void ShowAgents()
         {
             var agents = agentService.GetAll();
 
             if (agents.Count == 0)
             {
-                Console.WriteLine("Список риелторов пуст.");
+                Console.WriteLine("Список рієлторів порожній.");
                 return;
             }
 
@@ -341,26 +342,26 @@ namespace RealEstateAgency.Presentation
                 var a = agents[i];
 
                 Console.WriteLine($"\nНомер: {i + 1}");
-                Console.WriteLine($"Имя: {a.Name}");
-                Console.WriteLine($"Опыт: {a.Experience} лет");
+                Console.WriteLine($"Ім'я: {a.Name}");
+                Console.WriteLine($"Досвід: {a.Experience} років");
             }
         }
 
-        // Создание сделки
+        // Створення угоди
         private void AddDeal()
         {
-            Console.WriteLine("\n--- Недвижимость ---");
+            Console.WriteLine("\n--- Нерухомість ---");
             ShowProperties();
 
-            Console.WriteLine("\n--- Клиенты ---");
+            Console.WriteLine("\n--- Клієнти ---");
             ShowClients();
 
-            Console.WriteLine("\n--- Риелторы ---");
+            Console.WriteLine("\n--- Рієлтори ---");
             ShowAgents();
 
-            int propertyNumber = ReadInt("\nНомер недвижимости: ");
-            int clientNumber = ReadInt("Номер клиента: ");
-            int agentNumber = ReadInt("Номер риелтора: ");
+            int propertyNumber = ReadInt("\nНомер нерухомості: ");
+            int clientNumber = ReadInt("Номер клієнта: ");
+            int agentNumber = ReadInt("Номер рієлтора: ");
 
             var properties = propertyService.GetAll();
             var clients = clientService.GetAll();
@@ -370,15 +371,15 @@ namespace RealEstateAgency.Presentation
                 clientNumber < 1 || clientNumber > clients.Count ||
                 agentNumber < 1 || agentNumber > agents.Count)
             {
-                Console.WriteLine("Неверно выбран номер!");
+                Console.WriteLine("Невірно обраний номер!");
                 return;
             }
 
-            double price = ReadDouble("Стоимость сделки: ");
+            double price = ReadDouble("Вартість угоди: ");
 
-            string type = ReadText("Тип сделки (Покупка/Аренда): ");
+            string type = ReadText("Тип угоди (Купівля/Оренда): ");
 
-            double commission = ReadDouble("Комиссия (%): ");
+            double commission = ReadDouble("Комісія (%): ");
 
             dealService.Add(
                 properties[propertyNumber - 1],
@@ -389,17 +390,17 @@ namespace RealEstateAgency.Presentation
                 commission
             );
 
-            Console.WriteLine("Сделка успешно создана!");
+            Console.WriteLine("Угоду успішно створено!");
         }
 
-        // Просмотр сделок
+        // Перегляд угод
         private void ShowDeals()
         {
             var deals = dealService.GetAll();
 
             if (deals.Count == 0)
             {
-                Console.WriteLine("Список сделок пуст.");
+                Console.WriteLine("Список угод порожній.");
                 return;
             }
 
@@ -407,13 +408,13 @@ namespace RealEstateAgency.Presentation
             {
                 var d = deals[i];
 
-                Console.WriteLine($"\nСделка №{i + 1}");
-                Console.WriteLine($"Недвижимость: {d.PropertyAddress}");
-                Console.WriteLine($"Клиент: {d.ClientName}");
-                Console.WriteLine($"Риелтор: {d.AgentName}");
-                Console.WriteLine($"Стоимость: {d.Price}");
+                Console.WriteLine($"\nУгода №{i + 1}");
+                Console.WriteLine($"Нерухомість: {d.PropertyAddress}");
+                Console.WriteLine($"Клієнт: {d.ClientName}");
+                Console.WriteLine($"Рієлтор: {d.AgentName}");
+                Console.WriteLine($"Вартість: {d.Price}");
                 Console.WriteLine($"Тип: {d.Type}");
-                Console.WriteLine($"Комиссия: {d.CommissionPercent}%");
+                Console.WriteLine($"Комісія: {d.CommissionPercent}%");
                 Console.WriteLine($"Дата: {d.Date}");
             }
         }

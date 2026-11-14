@@ -5,6 +5,7 @@ using System.Text.Json;
 
 namespace RealEstateAgency.DataAccess
 {
+
     public class JsonFileStorage<T>
     {
         private readonly string filePath;

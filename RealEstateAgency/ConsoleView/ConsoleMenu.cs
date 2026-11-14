@@ -49,6 +49,10 @@ namespace RealEstateAgency.Presentation
                 Console.WriteLine("\n11. Створити угоду");
                 Console.WriteLine("12. Показати угоди");
 
+                Console.WriteLine("13. Пошук нерухомості");
+                Console.WriteLine("14. Змінити статус нерухомості");
+                Console.WriteLine("15. Історія статусів об'єкта");
+
                 Console.WriteLine("\n0. Вихід");
 
                 Console.Write("\nОберіть дію: ");
@@ -107,6 +111,17 @@ namespace RealEstateAgency.Presentation
                             ShowDeals();
                             break;
 
+                        case "13":
+                            SearchProperties();
+                            break;
+
+                        case "14":
+                            ChangePropertyStatus();
+                            break;
+
+                        case "15":
+                            ShowStatusHistory();
+                            break;
                         case "0":
                             running = false;
                             Console.WriteLine("Програму завершено.");
@@ -158,37 +173,36 @@ namespace RealEstateAgency.Presentation
             }
         }
 
-        // Введення ID
-        private Guid ReadId(string message)
-        {
-            while (true)
-            {
-                string value = ReadText(message);
-
-                if (Guid.TryParse(value, out Guid id))
-                    return id;
-
-                Console.WriteLine("Некоректний ID!");
-            }
-        }
-
         // Додавання нерухомості
+
+
         private void AddProperty()
         {
             Property property = new Property();
 
             property.Type = ReadText("Тип нерухомості: ");
+
             property.Area = ReadDouble("Площа: ");
+
             property.Address = ReadText("Адреса: ");
+
+            property.District = ReadText("Район: ");
+
+            property.Rooms = ReadInt("Кількість кімнат: ");
+
             property.Price = ReadDouble("Ціна: ");
-            property.Status = ReadText("Статус: ");
+
+            property.Status = "На продаж";
 
             propertyService.Add(property);
 
-            Console.WriteLine("Нерухомість додано!");
+            Console.WriteLine("Нерухомість успішно додана!");
         }
 
+
+
         // Перегляд нерухомості
+
         private void ShowProperties()
         {
             var properties = propertyService.GetAll();
@@ -203,34 +217,142 @@ namespace RealEstateAgency.Presentation
             {
                 var p = properties[i];
 
-                Console.WriteLine($"\nНомер: {i + 1}");
+                Console.WriteLine("\n--------------------");
+
+                Console.WriteLine($"Номер: {i + 1}");
                 Console.WriteLine($"Тип: {p.Type}");
-                Console.WriteLine($"Площа: {p.Area}");
+                Console.WriteLine($"Площа: {p.Area} м2");
                 Console.WriteLine($"Адреса: {p.Address}");
+                Console.WriteLine($"Район: {p.District}");
+                Console.WriteLine($"Кімнат: {p.Rooms}");
                 Console.WriteLine($"Ціна: {p.Price}");
                 Console.WriteLine($"Статус: {p.Status}");
             }
         }
 
+
         // Зміна нерухомості
+
         private void UpdateProperty()
         {
             ShowProperties();
 
-            int number = ReadInt("\nНомер нерухомості: ");
+            int number = ReadInt("\nВведіть номер нерухомості: ");
 
             Property updated = new Property();
 
             updated.Type = ReadText("Новий тип: ");
+
             updated.Area = ReadDouble("Нова площа: ");
+
             updated.Address = ReadText("Нова адреса: ");
+
+            updated.District = ReadText("Новий район: ");
+
+            updated.Rooms = ReadInt("Нова кількість кімнат: ");
+
             updated.Price = ReadDouble("Нова ціна: ");
-            updated.Status = ReadText("Новий статус: ");
 
             propertyService.Update(number, updated);
 
-            Console.WriteLine("Нерухомість змінено!");
+            Console.WriteLine("Дані нерухомості оновлено!");
         }
+
+        private double? ReadOptionalDouble(string message)
+        {
+            while (true)
+            {
+                Console.Write(message);
+
+                string input = Console.ReadLine() ?? "";
+
+                if (string.IsNullOrWhiteSpace(input))
+                    return null;
+
+                if (double.TryParse(input, out double value))
+                    return value;
+
+                Console.WriteLine("Введіть коректне число!");
+            }
+        }
+
+        private int? ReadOptionalInt(string message)
+        {
+            while (true)
+            {
+                Console.Write(message);
+
+                string input = Console.ReadLine() ?? "";
+
+                if (string.IsNullOrWhiteSpace(input))
+                    return null;
+
+                if (int.TryParse(input, out int value))
+                    return value;
+
+                Console.WriteLine("Введіть ціле число!");
+            }
+        }
+
+
+        private void SearchProperties()
+        {
+            Console.WriteLine("\n===== ПОШУК НЕРУХОМОСТІ =====");
+
+            Console.WriteLine("Якщо параметр не потрібен, натисніть Enter.");
+
+            PropertySearchCriteria criteria =
+                new PropertySearchCriteria();
+
+            criteria.Type = ReadText("Тип нерухомості: ");
+
+            criteria.MinPrice =
+                ReadOptionalDouble("Мінімальна ціна: ");
+
+            criteria.MaxPrice =
+                ReadOptionalDouble("Максимальна ціна: ");
+
+            criteria.MinArea =
+                ReadOptionalDouble("Мінімальна площа: ");
+
+            criteria.MaxArea =
+                ReadOptionalDouble("Максимальна площа: ");
+
+            criteria.District = ReadText("Район: ");
+
+            criteria.Rooms =
+                ReadOptionalInt("Кількість кімнат: ");
+
+            var result = propertyService.Search(criteria);
+
+            if (result.Count == 0)
+            {
+                Console.WriteLine("Нерухомість не знайдена.");
+                return;
+            }
+
+            Console.WriteLine("\n===== РЕЗУЛЬТАТИ ПОШУКУ =====");
+
+            for (int i = 0; i < result.Count; i++)
+            {
+                var p = result[i];
+
+                Console.WriteLine("\n--------------------");
+
+                Console.WriteLine($"Номер: {i + 1}");
+                Console.WriteLine($"Тип: {p.Type}");
+                Console.WriteLine($"Площа: {p.Area} м2");
+                Console.WriteLine($"Адреса: {p.Address}");
+                Console.WriteLine($"Район: {p.District}");
+                Console.WriteLine($"Кімнат: {p.Rooms}");
+                Console.WriteLine($"Ціна: {p.Price}");
+                Console.WriteLine($"Статус: {p.Status}");
+            }
+
+            Console.WriteLine($"\nЗнайдено об'єктів: {result.Count}");
+        }
+
+
 
         // Видалення нерухомості
         private void DeleteProperty()
@@ -394,6 +516,7 @@ namespace RealEstateAgency.Presentation
         }
 
         // Перегляд угод
+
         private void ShowDeals()
         {
             var deals = dealService.GetAll();
@@ -408,15 +531,138 @@ namespace RealEstateAgency.Presentation
             {
                 var d = deals[i];
 
-                Console.WriteLine($"\nУгода №{i + 1}");
+                Console.WriteLine("\n--------------------");
+
+                Console.WriteLine($"Угода №{i + 1}");
+
                 Console.WriteLine($"Нерухомість: {d.PropertyAddress}");
+
                 Console.WriteLine($"Клієнт: {d.ClientName}");
-                Console.WriteLine($"Рієлтор: {d.AgentName}");
+
+                Console.WriteLine($"Ріелтор: {d.AgentName}");
+
                 Console.WriteLine($"Вартість: {d.Price}");
+
                 Console.WriteLine($"Тип: {d.Type}");
-                Console.WriteLine($"Комісія: {d.CommissionPercent}%");
+
+                Console.WriteLine(
+                    $"Комісія: {d.CommissionPercent}%");
+
+                Console.WriteLine(
+                    $"Сума комісії: {d.CommissionAmount}");
+
                 Console.WriteLine($"Дата: {d.Date}");
             }
         }
+
+
+
+        private void ChangePropertyStatus()
+        {
+            ShowProperties();
+
+            int number = ReadInt(
+                "\nВведіть номер нерухомості: ");
+
+            var properties = propertyService.GetAll();
+
+            if (number < 1 || number > properties.Count)
+            {
+                Console.WriteLine("Неправильний номер!");
+                return;
+            }
+
+            Property property = properties[number - 1];
+
+            // Видаляємо зайві пробіли зі статусу
+            string currentStatus = property.Status.Trim();
+
+            Console.WriteLine($"\nПоточний статус: {currentStatus}");
+
+            string newStatus = "";
+
+            // Перевіряємо поточний статус
+            if (currentStatus == "На продаж" ||
+                currentStatus == "На продажу")
+            {
+                Console.WriteLine("1. Забронювати");
+                Console.Write("Ваш вибір: ");
+
+                if (ReadText("") == "1")
+                {
+                    newStatus = "Заброньовано";
+                }
+                else
+                {
+                    Console.WriteLine("Неправильний вибір!");
+                    return;
+                }
+            }
+            else if (currentStatus == "Заброньовано")
+            {
+                Console.WriteLine("1. Позначити як продано");
+                Console.Write("Ваш вибір: ");
+
+                if (ReadText("") == "1")
+                {
+                    newStatus = "Продано";
+                }
+                else
+                {
+                    Console.WriteLine("Неправильний вибір!");
+                    return;
+                }
+            }
+            else if (currentStatus == "Продано")
+            {
+                Console.WriteLine(
+                    "Цей об'єкт вже продано. Змінити статус неможливо!");
+                return;
+            }
+            else
+            {
+                Console.WriteLine(
+                    $"Невідомий статус об'єкта: {currentStatus}");
+                return;
+            }
+
+            // Викликаємо зміну статусу
+            propertyService.ChangeStatus(number, newStatus);
+
+            Console.WriteLine("Статус успішно змінено!");
+        }
+
+
+
+        private void ShowStatusHistory()
+        {
+            ShowProperties();
+
+            int number = ReadInt(
+                "\nВведіть номер нерухомості: ");
+
+            var history = propertyService.GetStatusHistory(number);
+
+            if (history.Count == 0)
+            {
+                Console.WriteLine(
+                    "Історія змін статусу відсутня.");
+                return;
+            }
+
+            Console.WriteLine("\n===== ІСТОРІЯ ЗМІН СТАТУСУ =====");
+
+            foreach (var item in history)
+            {
+                Console.WriteLine(
+                    $"{item.OldStatus} -> {item.NewStatus}");
+
+                Console.WriteLine(
+                    $"Дата: {item.ChangeDate}");
+
+                Console.WriteLine("--------------------");
+            }
+        }
+
     }
 }

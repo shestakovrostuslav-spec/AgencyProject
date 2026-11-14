@@ -12,7 +12,6 @@ namespace RealEstateAgency
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
-            Console.InputEncoding = Encoding.UTF8;
 
             // Створюємо сервіси
             PropertyService propertyService =

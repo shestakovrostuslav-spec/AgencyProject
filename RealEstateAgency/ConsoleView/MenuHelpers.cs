@@ -85,7 +85,7 @@ namespace RealEstateAgency.Presentation
             {
                 Property p = properties[i];
 
-                Console.WriteLine($"{i + 1}. {p.Type}, {p.Address}, район {p.District}, {p.Area} м², кімнат: {p.Rooms}, ціна: {p.Price}, статус: {p.Status}");
+                Console.WriteLine($"{i + 1}. {p.Type}, {p.Address}, район {p.District}, {p.Area} м², кімнат: {p.Rooms}, ціна: {p.Price}, ціна за м²: {p.PricePerSquareMeter}, статус: {p.Status}");
                 Console.WriteLine($"   Рієлтор: {p.AgentName}");
 
                 if (p.Status == "Заброньовано")

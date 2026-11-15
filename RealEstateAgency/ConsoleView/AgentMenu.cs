@@ -36,6 +36,11 @@ namespace RealEstateAgency.Presentation
                 Console.WriteLine("6. Переглянути мою нерухомість");
                 Console.WriteLine("7. Редагувати мою нерухомість");
                 Console.WriteLine("8. Видалити мою нерухомість");
+                Console.WriteLine("9. Показати кількість угод та прибуток");
+                Console.WriteLine("10. Показати активних клієнтів");
+                Console.WriteLine("11. Кількість угод за період");
+                Console.WriteLine("12. Загальна сума продажів");
+                Console.WriteLine("13. Показати ефективність рієлторів");
                 Console.WriteLine("0. Вийти з акаунта");
 
                 string choice = MenuHelpers.ReadText("Ваш вибір: ");
@@ -67,6 +72,23 @@ namespace RealEstateAgency.Presentation
                             break;
                         case "8":
                             DeleteProperty();
+                            break;
+                        case "9":
+                            int dealsCount = deals.GetDealsCountForAgent(agent.Name);
+                            double income = deals.GetIncomeForAgent(agent.Name);
+                            Console.WriteLine($"Кількість угод: {dealsCount}, Прибуток: {income}");
+                            break;
+                        case "10":
+                            deals.ShowActiveClients();
+                            break;
+                        case "11":
+                            ShowDealsCountByPeriod();
+                            break;
+                        case "12":
+                            ShowTotalSales();
+                            break;
+                        case "13":
+                            ShowAgentsEfficiency();
                             break;
                         case "0":
                             return;
@@ -116,7 +138,107 @@ namespace RealEstateAgency.Presentation
 
             return own[number - 1];
         }
+        private void ShowDealsCountByPeriod()
+        {
+            Console.WriteLine("\n===== КІЛЬКІСТЬ УГОД ЗА ПЕРІОД =====");
 
+            Console.Write("Введіть початкову дату (дд.мм.рррр): ");
+            string startInput = Console.ReadLine() ?? "";
+
+            Console.Write("Введіть кінцеву дату (дд.мм.рррр): ");
+            string endInput = Console.ReadLine() ?? "";
+
+            DateTime startDate;
+            DateTime endDate;
+
+            if (!DateTime.TryParseExact(
+                startInput,
+                "dd.MM.yyyy",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None,
+                out startDate))
+            {
+                Console.WriteLine("Невірно введена початкова дата!");
+                return;
+            }
+
+            if (!DateTime.TryParseExact(
+                endInput,
+                "dd.MM.yyyy",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None,
+                out endDate))
+            {
+                Console.WriteLine("Невірно введена кінцева дата!");
+                return;
+            }
+
+            if (startDate > endDate)
+            {
+                Console.WriteLine("Початкова дата не може бути більшою за кінцеву!");
+                return;
+            }
+
+            int count = deals.GetDealsCountByPeriod(startDate, endDate);
+
+            Console.WriteLine();
+            Console.WriteLine($"Період: {startDate:dd.MM.yyyy} - {endDate:dd.MM.yyyy}");
+            Console.WriteLine($"Кількість успішних угод: {count}");
+        }
+        private void ShowTotalSales()
+        {
+            Console.WriteLine("\n===== ЗАГАЛЬНА СУМА ПРОДАЖІВ =====");
+
+            double totalSales = deals.GetTotalSales();
+
+            Console.WriteLine($"Загальна сума продажів: {totalSales:F2} грн");
+        }
+        private void ShowAgentsEfficiency()
+        {
+            Console.WriteLine("\n===== ЕФЕКТИВНІСТЬ РІЄЛТОРІВ =====");
+
+            List<Agent> agents = new List<Agent>();
+
+            List<Deal> allDeals = deals.GetAll();
+
+            foreach (Deal deal in allDeals)
+            {
+                bool exists = false;
+
+                foreach (Agent agentItem in agents)
+                {
+                    if (agentItem.Name == deal.AgentName)
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists)
+                {
+                    Agent agentItem = new Agent();
+                    agentItem.Name = deal.AgentName;
+
+                    agents.Add(agentItem);
+                }
+            }
+
+            if (agents.Count == 0)
+            {
+                Console.WriteLine("Угод поки немає.");
+                return;
+            }
+
+            foreach (Agent agentItem in agents)
+            {
+                int count = deals.GetDealsCountForAgent(agentItem.Name);
+                double income = deals.GetIncomeForAgent(agentItem.Name);
+
+                Console.WriteLine($"\nРієлтор: {agentItem.Name}");
+                Console.WriteLine($"Кількість угод: {count}");
+                Console.WriteLine($"Прибуток: {income:F2} грн");
+            }
+        }
         private void EditProperty()
         {
             Property? selected = ChooseOwnProperty();

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace RealEstateAgency.Models
 {
@@ -14,5 +15,18 @@ namespace RealEstateAgency.Models
         public string AgentName { get; set; } = "";
         public string BookedByClientName { get; set; } = "";
         public List<StatusHistory> StatusHistory { get; set; } = new List<StatusHistory>();
+
+        public double PricePerSquareMeter
+        {
+            get
+            {
+                if (Area <= 0)
+                {
+                    return 0;
+                }
+
+                return Price / Area;
+            }
+        }
     }
 }

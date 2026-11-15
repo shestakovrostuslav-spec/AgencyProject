@@ -86,7 +86,8 @@ namespace RealEstateAgency.Presentation
 
             if (role == "Client")
             {
-                new ClientMenu(properties, account.Name).Run();
+                ClientMenu menu = new ClientMenu(properties, clients, account.Name);
+                menu.Run();
             }
             else
             {

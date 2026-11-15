@@ -228,7 +228,6 @@ namespace RealEstateAgency.BusinessLogic
                 throw;
             }
         }
-
         public void MarkSold(Property property, string agentName)
         {
             if (!properties.Contains(property))

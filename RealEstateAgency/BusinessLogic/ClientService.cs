@@ -51,5 +51,30 @@ namespace RealEstateAgency.BusinessLogic
                 throw;
             }
         }
+        public void SaveSearch(Client client, PropertySearchCriteria criteria)
+        {
+            if (client.SearchHistory == null)
+            {
+                client.SearchHistory = new PropertySearchCriteria[10];
+                client.SearchCount = 0;
+            }
+
+            if (client.SearchCount < 10)
+            {
+                client.SearchHistory[client.SearchCount] = criteria;
+                client.SearchCount++;
+            }
+            else
+            {
+                for (int i = 0; i < 9; i++)
+                {
+                    client.SearchHistory[i] = client.SearchHistory[i + 1];
+                }
+
+                client.SearchHistory[9] = criteria;
+            }
+
+            storage.Save(clients);
+        }
     }
 }

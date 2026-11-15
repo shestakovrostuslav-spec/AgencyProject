@@ -1,7 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Text;
-
 using RealEstateAgency.Models;
 using RealEstateAgency.DataAccess;
 
@@ -9,12 +7,11 @@ namespace RealEstateAgency.BusinessLogic
 {
     public class ClientService
     {
-        private readonly JsonFileStorage<Client> storage;
-        private List<Client> clients;
+        private readonly JsonFileStorage<Client> storage = new JsonFileStorage<Client>("clients.json");
+        private readonly List<Client> clients;
 
         public ClientService()
         {
-            storage = new JsonFileStorage<Client>("clients.json");
             clients = storage.Load();
         }
 
@@ -23,42 +20,90 @@ namespace RealEstateAgency.BusinessLogic
             return clients;
         }
 
+        public Client? FindByName(string name)
+        {
+            foreach (Client client in clients)
+            {
+                if (string.Equals(client.Name, name, StringComparison.OrdinalIgnoreCase))
+                    return client;
+            }
+
+            return null;
+        }
+
         public void Add(Client client)
         {
             if (string.IsNullOrWhiteSpace(client.Name))
                 throw new Exception("Введіть ім'я клієнта!");
 
-            if (string.IsNullOrWhiteSpace(client.Phone))
-                throw new Exception("Введіть телефон!");
+            if (FindByName(client.Name) != null)
+                throw new Exception("Клієнт із таким ім'ям вже існує!");
 
             clients.Add(client);
-            storage.Save(clients);
+
+            try
+            {
+                storage.Save(clients);
+            }
+            catch
+            {
+                clients.Remove(client);
+                throw;
+            }
+        }
+        public PropertySearchCriteria? GetLatestRequest(Client client)
+        {
+            if (client.SearchHistory == null)
+            {
+                return null;
+            }
+
+            for (int i = client.SearchHistory.Length - 1; i >= 0; i--)
+            {
+                if (client.SearchHistory[i] != null)
+                {
+                    return client.SearchHistory[i];
+                }
+            }
+
+            return null;
         }
 
-        public void Update(int number, Client updated)
+        public void SaveSearch(Client client, PropertySearchCriteria criteria)
         {
-            if (number < 1 || number > clients.Count)
-                throw new Exception("Невірний номер клієнта!");
+            if (client.SearchHistory == null)
+            {
+                client.SearchHistory = new PropertySearchCriteria[10];
+                client.SearchCount = 0;
+            }
 
-            if (string.IsNullOrWhiteSpace(updated.Name))
-                throw new Exception("Введіть ім'я!");
+            if (client.SearchCount < 0 || client.SearchCount > client.SearchHistory.Length)
+            {
+                client.SearchCount = 0;
+                for (int i = 0; i < client.SearchHistory.Length; i++)
+                {
+                    if (client.SearchHistory[i] != null)
+                    {
+                        client.SearchCount = i + 1;
+                    }
+                }
+            }
 
-            Client client = clients[number - 1];
+            if (client.SearchCount < client.SearchHistory.Length)
+            {
+                client.SearchHistory[client.SearchCount] = criteria;
+                client.SearchCount++;
+            }
+            else
+            {
+                for (int i = 0; i < client.SearchHistory.Length - 1; i++)
+                {
+                    client.SearchHistory[i] = client.SearchHistory[i + 1];
+                }
 
-            client.Name = updated.Name;
-            client.Phone = updated.Phone;
-            client.Email = updated.Email;
-            client.Type = updated.Type;
+                client.SearchHistory[client.SearchHistory.Length - 1] = criteria;
+            }
 
-            storage.Save(clients);
-        }
-
-        public void Delete(int number)
-        {
-            if (number < 1 || number > clients.Count)
-                throw new Exception("Невірний номер клієнта!");
-
-            clients.RemoveAt(number - 1);
             storage.Save(clients);
         }
     }

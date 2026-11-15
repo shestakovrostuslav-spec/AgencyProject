@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Text;
-
 using RealEstateAgency.BusinessLogic;
 using RealEstateAgency.Presentation;
 
@@ -11,30 +9,13 @@ namespace RealEstateAgency
     {
         static void Main(string[] args)
         {
-            Console.OutputEncoding = Encoding.UTF8;
-
-            // Створюємо сервіси
-            PropertyService propertyService =
-                new PropertyService();
-
-            ClientService clientService =
-                new ClientService();
-
-            AgentService agentService =
-                new AgentService();
-
-            // Створюємо сервіс угод
-            DealService dealService = new DealService();
-
-            // Створюємо інтерфейс
-            ConsoleMenu menu = new ConsoleMenu(
-                propertyService,
-                clientService,
-                agentService,
-                dealService);
-
-            // Запускаємо програму
-            menu.Run();
+            Console.InputEncoding = Encoding.Unicode;
+            Console.OutputEncoding = Encoding.Unicode;
+            var propertyService = new PropertyService();
+            var clientService = new ClientService();
+            var agentService = new AgentService();
+            var dealService = new DealService();
+            new ConsoleMenu(propertyService, clientService, agentService, dealService).Run();
         }
     }
 }

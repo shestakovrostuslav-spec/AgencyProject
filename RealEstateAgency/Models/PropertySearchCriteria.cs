@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,6 +9,8 @@ namespace RealEstateAgency.Models
     public class PropertySearchCriteria
     {
         public string? Type { get; set; }
+
+        public string? ListingType { get; set; }
 
         public double? MinPrice { get; set; }
 
